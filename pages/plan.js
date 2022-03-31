@@ -264,6 +264,7 @@ export default function Home() {
     setEvents(tempEvents);
   }, []);
 
+  // Whenever the "events" changes...
   useEffect(() => {
     let tempEvents = events;
 
@@ -273,7 +274,7 @@ export default function Home() {
       if (!tempEvents[i].started && !tempEvents[i].fixed) {
         tempEvents[i]["startTime"] = addTime(
           tempEvents[i - 1].startTime,
-          tempEvents[i - 1].length
+          tempEvents[i - 1].realLength
         );
       }
     }
@@ -282,12 +283,14 @@ export default function Home() {
 
     let fixedEvents = [];
 
+    // Collect the indexes of all the fixed events
     for (let i = 0; i < tempEvents.length; i++) {
       if (tempEvents[i].fixed) {
         fixedEvents.push(i);
       }
     }
 
+    // Calculate the correct multiplier for the event times
     if (fixedEvents.length >= 2) {
       for (let i = 1; i < fixedEvents.length; i++) {
         let fixedDif = subtractTime(
